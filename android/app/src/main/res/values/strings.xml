@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">계란 단가 계산기</string>
+    <string name="subtitle">사이즈·가격으로 10g당 단가를 한눈에 비교해요</string>
+    <string name="shell_help_body">마트 난중(소란~왕란)은 껍질 포함 무게입니다. 실제로 먹는 부분은 흰자+노른자뿐이라, 껍질을 빼면 먹을 수 있는 g당 단가에 더 가깝습니다.\n\n기본 알맹이 비율 %1$d%%(껍질 약 %2$d%%)는 교재·개요에서 흔히 쓰는 평균 추정치입니다. 가금 연구에 따르면 알이 클수록 껍질 무게 비율이 다소 낮아지는 경향이 있으나, 품종·주령에 따라 달라 호수별 고정 표준은 아닙니다.</string>
+    <string name="shell_help_body_default">마트 난중(소란~왕란)은 껍질 포함 무게입니다. 실제로 먹는 부분은 흰자+노른자뿐이라, 껍질을 빼면 먹을 수 있는 g당 단가에 더 가깝습니다. 기본 알맹이 비율 89%(껍질 약 11%)는 평균 추정치입니다.</string>
+    <string name="disclaimer">호수 대표 중량은 한국 유통 관행 추정치입니다. 껍질 비율 기본값 11%는 평균 참고치이며 연구에 따라 약 9~14%로 보고됩니다. 저장 이력은 기기에만 남고, 위치는 저장 시에만 사용합니다. 전국 시세 의견은 참고용 추정치입니다.</string>
+    <!-- GitHub raw URL. 비우면 assets/market-live.json 만 사용. Actions 자동화 후 채우기 -->
+    <string name="market_feed_remote_url" translatable="false">https://raw.githubusercontent.com/TeslaOptimusK/egg-price-calculator/main/web/market-live.json</string>
+
+</resources>
+

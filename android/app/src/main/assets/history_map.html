@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <style>
+    html, body, #map { margin: 0; height: 100%; width: 100%; background: #e5e5ea; }
+    .pin { width: 14px; height: 14px; border-radius: 50%; border: 2px solid #fff;
+      box-shadow: 0 1px 4px rgba(0,0,0,.35); }
+  </style>
+</head>
+<body>
+  <div id="map"></div>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script>
+    var map = L.map('map').setView([36.5, 127.8], 7);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19, attribution: '&copy; OSM'
+    }).addTo(map);
+    var group = L.layerGroup().addTo(map);
+    var COLORS = { so:'#8e8e93', jung:'#64d2ff', dae:'#30d158', teuk:'#ff9f0a', wang:'#ff375f' };
+
+    function setMarkers(jsonStr) {
+      group.clearLayers();
+      var list = [];
+      try { list = JSON.parse(jsonStr || '[]'); } catch (e) { list = []; }
+      var bounds = [];
+      list.forEach(function (e) {
+        if (e.lat == null || e.lng == null) return;
+        var color = COLORS[e.sizeId] || '#ff9f0a';
+        var icon = L.divIcon({
+          className: '',
+          html: '<div class="pin" style="background:' + color + '"></div>',
+          iconSize: [14, 14], iconAnchor: [7, 7]
+        });
+        var m = L.marker([e.lat, e.lng], { icon: icon });
+        m.bindPopup(
+          '<b>' + (e.note || e.locationLabel || '저장') + '</b><br/>' +
+          (e.sizeLabel || '') + ' · ' + (e.count || '') + '개<br/>' +
+          (e.per10g != null ? Math.round(e.per10g).toLocaleString() + '원/10g' : '')
+        );
+        m.addTo(group);
+        bounds.push([e.lat, e.lng]);
+      });
+      if (bounds.length === 1) map.setView(bounds[0], 14);
+      else if (bounds.length > 1) map.fitBounds(bounds, { padding: [30, 30], maxZoom: 14 });
+      else map.setView([36.5, 127.8], 7);
+      setTimeout(function () { map.invalidateSize(); }, 200);
+    }
+    window.setMarkers = setMarkers;
+  </script>
+</body>
+</html>

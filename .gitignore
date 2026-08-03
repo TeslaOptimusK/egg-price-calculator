@@ -1,0 +1,32 @@
+# Android / Gradle
+android/.gradle/
+android/build/
+android/app/build/
+android/local.properties
+android/*.iml
+android/.idea/
+*.apk
+*.aab
+*.ap_
+*.dex
+captures/
+
+# Kotlin / Java
+*.class
+*.jar
+!gradle/wrapper/gradle-wrapper.jar
+
+# OS / editor
+.DS_Store
+Thumbs.db
+*.swp
+.idea/
+*.iml
+
+# Node (if any)
+node_modules/
+
+# Secrets — never commit
+.env
+.env.*
+**/secrets.*

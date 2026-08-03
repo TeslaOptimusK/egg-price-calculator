@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- iOS-inspired palette + warm egg accent -->
+    <color name="bg">#F2F2F7</color>
+    <color name="card">#FFFFFF</color>
+    <color name="ink">#1C1C1E</color>
+    <color name="ink_secondary">#3A3A3C</color>
+    <color name="muted">#8E8E93</color>
+    <color name="separator">#1F3C3C43</color>
+    <color name="fill">#1E787880</color>
+    <color name="accent">#FF9F0A</color>
+    <color name="accent_press">#E68600</color>
+    <color name="accent_soft">#FFF4E0</color>
+    <color name="good">#34C759</color>
+    <color name="result_bg">#1C1C1E</color>
+    <color name="result_accent">#FFD27A</color>
+    <color name="result_muted">#99EBEBF5</color>
+    <color name="result_detail">#B3EBEBF5</color>
+    <color name="ic_bg">#FF9F0A</color>
+    <color name="white">#FFFFFF</color>
+</resources>

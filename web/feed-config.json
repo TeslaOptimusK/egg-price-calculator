@@ -1,0 +1,6 @@
+{
+  "remoteFeeds": [
+    "https://raw.githubusercontent.com/TeslaOptimusK/egg-price-calculator/main/web/market-live.json"
+  ],
+  "comment": "GitHub Actions가 매일 market-live.json을 갱신합니다. 앱은 이 raw URL을 하루 1회 읽습니다."
+}

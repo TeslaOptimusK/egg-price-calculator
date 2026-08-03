@@ -1,0 +1,44 @@
+# 2단계 시세 피드 자동화 (서버 구축 없음)
+# - 매일 한국 시간 오전 ~6시대에 실행 (UTC 21:00 ≈ KST 06:00)
+# - market-live.json 갱신 후 커밋
+# - 선택: repo Secrets 에 KAMIS_CERT_KEY, KAMIS_CERT_ID 넣으면 실시세
+# - 없으면 날짜만 갱신 + 기존 가격 유지
+name: Daily market feed
+
+on:
+  schedule:
+    - cron: "0 21 * * *"
+  workflow_dispatch: # 수동 실행
+
+permissions:
+  contents: write
+
+jobs:
+  update-feed:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Update market-live.json
+        env:
+          KAMIS_CERT_KEY: ${{ secrets.KAMIS_CERT_KEY }}
+          KAMIS_CERT_ID: ${{ secrets.KAMIS_CERT_ID }}
+        run: node scripts/update-market-feed.mjs
+
+      - name: Commit if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add web/market-live.json android/app/src/main/assets/market-live.json
+          if git diff --staged --quiet; then
+            echo "No changes"
+          else
+            git commit -m "chore(market): daily feed update $(date -u +%Y-%m-%d)"
+            git push
+          fi

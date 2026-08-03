@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#F2F2F7" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="description" content="계란 단가 계산 · KAMIS 시세 · 저장 지도 · 동일 사이즈 비교" />
+  <title>계란 단가 계산기</title>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" />
+  <link rel="preconnect" href="https://unpkg.com" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="app">
+    <header class="hero">
+      <div class="hero-icon" aria-hidden="true">🥚</div>
+      <p class="hero-kicker">Smart Calc</p>
+      <h1>계란 단가</h1>
+      <p class="sub">실시간 시세 · 저장 지도 · 같은 사이즈 비교</p>
+    </header>
+
+    <!-- 라이브 시세 배너 — 키 불필요 -->
+    <section class="live-banner card-ios" id="live-banner">
+      <div class="live-banner-top">
+        <span class="live-dot" id="live-dot"></span>
+        <div>
+          <p class="live-title" id="live-title">전국 참고 시세</p>
+          <p class="live-sub" id="live-sub">하루 1회 자동 반영 · 키 불필요 · 같은 사이즈</p>
+        </div>
+      </div>
+      <button type="button" class="btn-primary small" id="btn-fetch-live">오늘 시세 받기</button>
+    </section>
+
+    <!-- 계산 기준 -->
+    <section class="group">
+      <p class="group-title">계산 기준</p>
+      <div class="card-ios shell-mode">
+        <div class="segmented" role="group" aria-label="껍질 포함 여부">
+          <button type="button" class="seg-btn active" data-exclude="true" id="btn-exclude">
+            껍질 제외
+            <span>알맹이만</span>
+          </button>
+          <button type="button" class="seg-btn" data-exclude="false" id="btn-include">
+            껍질 포함
+            <span>전체 중량</span>
+          </button>
+        </div>
+
+        <div id="shell-help" class="shell-help">
+          <div class="callout">
+            <div class="callout-icon">💡</div>
+            <div>
+              <p class="callout-title">왜 껍질을 빼나요?</p>
+              <p>
+                마트 난중은 <strong>껍질 포함</strong> 무게예요.
+                먹는 부분은 흰자+노른자라, 껍질을 빼면 “먹을 수 있는 g당 얼마”에 더 가까워져요.
+              </p>
+              <p class="callout-note">
+                기본 알맹이 <strong id="edible-label">89%</strong>
+                (껍질 약 <strong id="shell-pct-label">11%</strong>)는 평균 추정치예요.
+              </p>
+            </div>
+          </div>
+          <div class="slider-row">
+            <div class="slider-head">
+              <span>알맹이 비율</span>
+              <em id="edible-range-label">89%</em>
+            </div>
+            <input id="edible-ratio" type="range" min="85" max="92" value="89" />
+            <div class="slider-ends"><span>85%</span><span>92%</span></div>
+          </div>
+        </div>
+
+        <p id="shell-include-note" class="inline-note hidden">
+          껍질 포함 모드 · 호수 대표 중량 전체로 10g당 단가를 계산해요
+        </p>
+      </div>
+    </section>
+
+    <!-- 탭 -->
+    <div class="segmented tabs" role="tablist">
+      <button type="button" class="seg-btn tab active" data-tab="single">한 상품</button>
+      <button type="button" class="seg-btn tab" data-tab="compare">비교</button>
+      <button type="button" class="seg-btn tab" data-tab="history">이력·지도</button>
+    </div>
+
+    <!-- 한 상품 -->
+    <section id="panel-single" class="panel active">
+      <p class="group-title">상품 정보</p>
+      <div class="card-ios form-card" data-side="A">
+        <div class="size-block">
+          <span class="field-label">사이즈 <em class="size-hint">(시세는 같은 호수만 비교)</em></span>
+          <div class="egg-picker" role="listbox" aria-label="계란 사이즈"></div>
+          <select class="size ios-select" aria-label="사이즈 선택"></select>
+        </div>
+
+        <div class="divider"></div>
+
+        <label class="field">
+          <span class="field-label">개수</span>
+          <div class="chips count-chips"></div>
+          <input class="count ios-input" type="number" min="1" max="999" value="30" inputmode="numeric" />
+        </label>
+
+        <div class="divider"></div>
+
+        <label class="field">
+          <span class="field-label">가격</span>
+          <div class="input-wrap">
+            <input class="price ios-input large" type="number" min="0" step="10" placeholder="0" inputmode="numeric" />
+            <span class="suffix">원</span>
+          </div>
+        </label>
+
+        <div class="divider"></div>
+
+        <label class="field">
+          <span class="field-label">매장·메모 (선택)</span>
+          <input id="save-note" class="ios-input" type="text" maxlength="40" placeholder="예: 이마트 성수점" />
+        </label>
+
+        <div class="divider"></div>
+
+        <label class="field compact">
+          <span class="field-label">중량 기준</span>
+          <select class="weight-mode ios-select">
+            <option value="mid" selected>대표값 (권장)</option>
+            <option value="min">범위 하한 (보수적)</option>
+            <option value="custom">직접 입력 (g/개)</option>
+          </select>
+        </label>
+
+        <label class="field custom-weight hidden">
+          <span class="field-label">1개 실측 중량 (껍질 포함)</span>
+          <div class="input-wrap">
+            <input class="custom-g ios-input" type="number" min="1" step="0.1" value="60" inputmode="decimal" />
+            <span class="suffix">g</span>
+          </div>
+        </label>
+      </div>
+
+      <div class="result-card" id="result-single">
+        <p class="hint">사이즈·가격·개수를 입력하면 결과가 나타나요</p>
+      </div>
+
+      <div class="action-row">
+        <button type="button" class="btn-primary" id="btn-save" disabled>
+          이 가격 저장
+        </button>
+        <p class="action-hint" id="save-status">위치·시간과 함께 기기에만 저장돼요</p>
+      </div>
+    </section>
+
+    <!-- 비교 -->
+    <section id="panel-compare" class="panel">
+      <div class="same-size-bar card-ios">
+        <label class="toggle-row">
+          <input type="checkbox" id="chk-same-size-only" checked />
+          <span>
+            <strong>같은 사이즈만</strong>
+            <small>이력 불러오기·시세 의견을 동일 호수로 제한</small>
+          </span>
+        </label>
+        <p class="size-warn hidden" id="compare-size-warn"></p>
+      </div>
+
+      <p class="group-title">저장 이력에서 불러오기</p>
+      <div class="card-ios load-bar">
+        <label class="field compact">
+          <span class="field-label">상품 A에 넣기</span>
+          <select id="load-history-a" class="ios-select">
+            <option value="">선택…</option>
+          </select>
+        </label>
+        <div class="divider"></div>
+        <label class="field compact">
+          <span class="field-label">상품 B에 넣기</span>
+          <select id="load-history-b" class="ios-select">
+            <option value="">선택…</option>
+          </select>
+        </label>
+      </div>
+
+      <div class="compare-grid">
+        <div>
+          <p class="group-title">상품 A</p>
+          <div class="card-ios form-card" data-side="A">
+            <div class="size-block">
+              <span class="field-label">사이즈</span>
+              <div class="egg-picker" role="listbox" aria-label="상품 A 사이즈"></div>
+              <select class="size ios-select" aria-label="상품 A 사이즈"></select>
+            </div>
+            <div class="divider"></div>
+            <label class="field">
+              <span class="field-label">개수</span>
+              <input class="count ios-input" type="number" min="1" max="999" value="30" inputmode="numeric" />
+            </label>
+            <div class="divider"></div>
+            <label class="field">
+              <span class="field-label">가격</span>
+              <div class="input-wrap">
+                <input class="price ios-input large" type="number" min="0" step="10" placeholder="0" inputmode="numeric" />
+                <span class="suffix">원</span>
+              </div>
+            </label>
+            <div class="divider"></div>
+            <label class="field compact">
+              <span class="field-label">중량 기준</span>
+              <select class="weight-mode ios-select">
+                <option value="mid" selected>대표값</option>
+                <option value="min">범위 하한</option>
+                <option value="custom">직접 입력</option>
+              </select>
+            </label>
+            <label class="field custom-weight hidden">
+              <span class="field-label">g/개 (껍질 포함)</span>
+              <div class="input-wrap">
+                <input class="custom-g ios-input" type="number" min="1" step="0.1" value="60" inputmode="decimal" />
+                <span class="suffix">g</span>
+              </div>
+            </label>
+          </div>
+        </div>
+
+        <div>
+          <p class="group-title">상품 B</p>
+          <div class="card-ios form-card" data-side="B">
+            <div class="size-block">
+              <span class="field-label">사이즈</span>
+              <div class="egg-picker" role="listbox" aria-label="상품 B 사이즈"></div>
+              <select class="size ios-select" aria-label="상품 B 사이즈"></select>
+            </div>
+            <div class="divider"></div>
+            <label class="field">
+              <span class="field-label">개수</span>
+              <input class="count ios-input" type="number" min="1" max="999" value="30" inputmode="numeric" />
+            </label>
+            <div class="divider"></div>
+            <label class="field">
+              <span class="field-label">가격</span>
+              <div class="input-wrap">
+                <input class="price ios-input large" type="number" min="0" step="10" placeholder="0" inputmode="numeric" />
+                <span class="suffix">원</span>
+              </div>
+            </label>
+            <div class="divider"></div>
+            <label class="field compact">
+              <span class="field-label">중량 기준</span>
+              <select class="weight-mode ios-select">
+                <option value="mid" selected>대표값</option>
+                <option value="min">범위 하한</option>
+                <option value="custom">직접 입력</option>
+              </select>
+            </label>
+            <label class="field custom-weight hidden">
+              <span class="field-label">g/개 (껍질 포함)</span>
+              <div class="input-wrap">
+                <input class="custom-g ios-input" type="number" min="1" step="0.1" value="56" inputmode="decimal" />
+                <span class="suffix">g</span>
+              </div>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <div class="result-card" id="result-compare">
+        <p class="hint">양쪽 가격을 입력하면 비교 결과가 나타나요</p>
+      </div>
+    </section>
+
+    <!-- 저장 이력 + 지도 -->
+    <section id="panel-history" class="panel">
+      <p class="group-title">지도 · 저장 지점</p>
+      <div class="card-ios map-card">
+        <div class="map-filters">
+          <label class="toggle-row compact">
+            <input type="checkbox" id="chk-map-same-size" checked />
+            <span>현재 선택 사이즈만 표시</span>
+          </label>
+          <select id="map-size-filter" class="ios-select map-size-select">
+            <option value="">전체 사이즈</option>
+          </select>
+        </div>
+        <div id="history-map" class="history-map" role="img" aria-label="저장 지점 지도"></div>
+        <p class="action-hint" id="map-status">위치가 있는 저장만 지도에 표시돼요</p>
+        <div class="map-legend" id="map-legend"></div>
+      </div>
+
+      <p class="group-title">저장된 가격 <span id="history-count" class="count-pill">0</span></p>
+      <label class="toggle-row card-ios hist-filter">
+        <input type="checkbox" id="chk-hist-same-size" checked />
+        <span>
+          <strong>같은 사이즈만 목록</strong>
+          <small id="hist-size-label">특란 기준</small>
+        </span>
+      </label>
+      <div id="history-list" class="history-list"></div>
+      <button type="button" class="btn-ghost danger hidden" id="btn-clear-history">전체 삭제</button>
+    </section>
+
+    <!-- 시세 설정 — 기본은 키 불필요 -->
+    <details class="ios-disclosure" id="market-settings">
+      <summary>시세 설정 (키 없이 사용 가능)</summary>
+      <div class="market-form">
+        <div class="callout" style="margin-bottom: 14px">
+          <div class="callout-icon">✅</div>
+          <div>
+            <p class="callout-title">일반 사용자는 키 필요 없어요</p>
+            <p>
+              앱이 <strong>공개 시세 피드</strong>와 기본 참고가로 바로 비교해요.
+              위쪽 <strong>시세 새로고침</strong>만 누르면 됩니다.
+            </p>
+          </div>
+        </div>
+
+        <p class="field-label">참고 팩가 (30개) · 직접 수정 가능</p>
+        <div class="market-meta-row">
+          <input id="market-asof" class="ios-input" type="text" placeholder="2026-03" />
+          <input id="market-source" class="ios-input" type="text" placeholder="출처 메모" />
+        </div>
+        <div id="market-price-fields" class="market-price-fields"></div>
+        <div class="market-actions">
+          <button type="button" class="btn-primary small" id="btn-save-market">내 시세 저장</button>
+          <button type="button" class="btn-ghost small" id="btn-reset-market">기본값 복원</button>
+          <button type="button" class="btn-ghost small" id="btn-fetch-live-2">오늘 시세 받기</button>
+        </div>
+        <p class="action-hint" id="market-save-status"></p>
+        <p class="action-hint" id="kamis-status"></p>
+
+        <details class="advanced-kamis">
+          <summary>고급 · KAMIS API (개발자·선택)</summary>
+          <p class="disclaimer" style="padding: 10px 0">
+            공식 공시 API를 직접 쓰려면 키가 필요합니다.
+            <strong>스토어 일반 사용자에게는 권장하지 않아요.</strong>
+            운영자가 서버/피드로 갱신하는 방식이 더 안전합니다.
+            발급:
+            <a href="https://www.kamis.or.kr/customer/reference/openapi_list.do" target="_blank" rel="noopener">kamis.or.kr</a>
+          </p>
+          <label class="field compact">
+            <span class="field-label">p_cert_key</span>
+            <input id="kamis-key" class="ios-input" type="password" autocomplete="off" placeholder="선택 사항" />
+          </label>
+          <label class="field compact">
+            <span class="field-label">p_cert_id</span>
+            <input id="kamis-id" class="ios-input" type="text" autocomplete="off" placeholder="선택 사항" />
+          </label>
+          <label class="toggle-row" style="margin: 8px 0 12px">
+            <input type="checkbox" id="kamis-proxy" checked />
+            <span>CORS 프록시 사용</span>
+          </label>
+          <div class="market-actions">
+            <button type="button" class="btn-ghost small" id="btn-save-kamis">키 저장</button>
+            <button type="button" class="btn-ghost small" id="btn-fetch-kamis">KAMIS로 가져오기</button>
+          </div>
+        </details>
+      </div>
+    </details>
+
+    <details class="ios-disclosure">
+      <summary>더 알아보기 · 고지</summary>
+      <p class="disclaimer">
+        호수 대표 중량·껍질 비율은 추정치입니다.
+        시세 비교는 <strong>동일 사이즈(호수)끼리만</strong> 합니다.
+        KAMIS 데이터 단위(10개/30개 등)는 30개 팩으로 환산하며, 지역·등급에 따라 차이가 날 수 있습니다.
+        저장 이력·지도·API 키는 기기 로컬에만 남습니다.
+        지도 타일 © OpenStreetMap.
+      </p>
+    </details>
+
+    <footer>
+      <p>오프라인 계산 · 시세·이력은 기기에 저장</p>
+    </footer>
+  </div>
+
+  <div id="toast" class="toast hidden" role="status"></div>
+
+  <script src="calc.js"></script>
+  <script src="public-feed.js"></script>
+  <script src="kamis.js"></script>
+  <script src="market.js"></script>
+  <script src="storage.js"></script>
+  <script src="map.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
