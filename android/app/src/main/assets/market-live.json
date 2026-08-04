@@ -1,8 +1,8 @@
 {
-  "asOf": "2026-08-03",
-  "source": "공개 시세 피드 (자동 날짜 갱신 · 가격은 수동/이전값)",
+  "asOf": "2026-08-04",
+  "source": "공개 시세 피드 (자동 날짜 갱신 · 가격은 수동/이전값) · 자동갱신 실패→가격유지",
   "packCount": 30,
-  "note": "KAMIS_CERT_KEY / KAMIS_CERT_ID 시크릿이 없어 가격은 유지하고 기준일만 갱신했습니다. 실시세 자동화를 쓰려면 GitHub repo Secrets에 키를 넣으세요. 키는 앱에 넣지 않습니다.",
+  "note": "자동 갱신 시 KAMIS 오류(KAMIS HTTP 406). 이전 packPrice 유지, 날짜만 2026-08-04.",
   "packPrice": {
     "so": 5200,
     "jung": 5900,
@@ -10,9 +10,9 @@
     "teuk": 7400,
     "wang": 8200
   },
-  "updatedAt": "2026-08-03T09:37:26.001Z",
+  "updatedAt": "2026-08-04T02:44:41.219Z",
   "autoUpdate": {
-    "mode": "date-roll",
+    "mode": "kamis-fallback",
     "timezone": "Asia/Seoul",
     "policy": "daily"
   }
