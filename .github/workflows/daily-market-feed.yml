@@ -1,5 +1,8 @@
-# 시세 피드 자동화 — 하루 1회 (KST 아침 무렵)
-# Secrets: KAMIS_CERT_KEY, KAMIS_CERT_ID
+# 시세 피드 자동화 (보조)
+# 주의: KAMIS 웹방화벽이 GitHub Actions IP를 차단(HTTP 406)하는 경우가 있음.
+# 실시세는 PC에서 scripts/run-local-market-update.ps1 실행을 권장.
+# 이 워크플로는 날짜 롤링/폴백 커밋용으로 유지.
+# Secrets: KAMIS_CERT_KEY, KAMIS_CERT_ID (차단 시 무시되고 이전 가격 유지)
 name: Daily market feed
 
 on:

@@ -81,6 +81,31 @@ node scripts/update-market-feed.mjs
 - KAMIS 응답 구조 변경 시 스크립트 수정 필요
 - raw URL은 캐시될 수 있음 → 앱은 하루 1회 + `fetchDay` 정책
 
+## KAMIS HTTP 406 (웹 방화벽)
+
+GitHub Actions 로그에 아래가 보이면 **클라우드 IP 차단**입니다.
+
+```text
+The request / response that are contrary to the Web firewall security policies have been blocked.
+HTTP 406
+```
+
+키 오류가 아니라 **KAMIS가 GitHub 서버 IP를 막은 것**입니다. 헤더/curl로도 우회되지 않는 경우가 많습니다.
+
+### 권장: 로컬 PC에서 하루 1회 갱신
+
+1. `.env.local.example` → `.env.local` 복사 후 키·ID 입력 (커밋 금지)
+2. 실행:
+
+```powershell
+cd D:\Grok\egg-price-calculator
+powershell -ExecutionPolicy Bypass -File scripts\run-local-market-update.ps1
+```
+
+3. (선택) Windows 작업 스케줄러에 매일 1회 등록
+
+로컬 IP에서는 정상 호출되는 경우가 많고, push된 JSON을 앱이 raw URL로 받습니다.
+
 ## 3단계(Workers)와 차이
 
 | | 2단계 자동화 (지금) | 3단계 Workers |
