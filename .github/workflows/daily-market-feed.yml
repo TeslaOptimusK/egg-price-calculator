@@ -1,14 +1,11 @@
-# 2단계 시세 피드 자동화 (서버 구축 없음)
-# - 매일 한국 시간 오전 ~6시대에 실행 (UTC 21:00 ≈ KST 06:00)
-# - market-live.json 갱신 후 커밋
-# - 선택: repo Secrets 에 KAMIS_CERT_KEY, KAMIS_CERT_ID 넣으면 실시세
-# - 없으면 날짜만 갱신 + 기존 가격 유지
+# 시세 피드 자동화 — 하루 1회 (KST 아침 무렵)
+# Secrets: KAMIS_CERT_KEY, KAMIS_CERT_ID
 name: Daily market feed
 
 on:
   schedule:
     - cron: "0 21 * * *"
-  workflow_dispatch: # 수동 실행
+  workflow_dispatch:
 
 permissions:
   contents: write
@@ -23,12 +20,55 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: "20"
+          node-version: "22"
+
+      - name: Prefetch KAMIS with curl (browser-like, IPv4)
+        env:
+          KAMIS_CERT_KEY: ${{ secrets.KAMIS_CERT_KEY }}
+          KAMIS_CERT_ID: ${{ secrets.KAMIS_CERT_ID }}
+        run: |
+          set -e
+          if [ -z "$KAMIS_CERT_KEY" ] || [ -z "$KAMIS_CERT_ID" ]; then
+            echo "No KAMIS secrets — skip prefetch"
+            exit 0
+          fi
+          KEY=$(python3 -c "import urllib.parse,os; print(urllib.parse.quote(os.environ['KAMIS_CERT_KEY'].strip(), safe=''))")
+          ID=$(python3 -c "import urllib.parse,os; print(urllib.parse.quote(os.environ['KAMIS_CERT_ID'].strip(), safe=''))")
+          YMD=$(TZ=Asia/Seoul date +%Y%m%d)
+          UA='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36'
+          URL="https://www.kamis.or.kr/service/price/xml.do?action=dailyPriceByCategoryList&p_product_cls_code=01&p_item_category_code=500&p_category_code=500&p_regday=${YMD}&p_cert_key=${KEY}&p_cert_id=${ID}&p_returntype=json"
+          echo "Prefetch KAMIS (key/id redacted) regday=$YMD"
+          HTTP=$(curl -sS -L --max-time 30 -4 \
+            -A "$UA" \
+            -H 'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8' \
+            -H 'Accept-Language: ko-KR,ko;q=0.9,en;q=0.8' \
+            -o /tmp/kamis.json \
+            -w '%{http_code}' \
+            "$URL" || echo "000")
+          echo "curl HTTP $HTTP size=$(wc -c </tmp/kamis.json 2>/dev/null || echo 0)"
+          head -c 200 /tmp/kamis.json || true
+          echo
+          # 406 등 실패 시 두 번째 URL (기간 조회)
+          if [ "$HTTP" != "200" ]; then
+            START=$(TZ=Asia/Seoul date -d '7 days ago' +%Y-%m-%d 2>/dev/null || TZ=Asia/Seoul date -v-7d +%Y-%m-%d)
+            END=$(TZ=Asia/Seoul date +%Y-%m-%d)
+            URL2="https://www.kamis.or.kr/service/price/xml.do?action=periodProductList&p_startday=${START}&p_endday=${END}&p_productclscode=01&p_itemcategorycode=500&p_itemcode=&p_kindcode=&p_productrankcode=&p_convert_kg_yn=N&p_cert_key=${KEY}&p_cert_id=${ID}&p_returntype=json"
+            HTTP2=$(curl -sS -L --max-time 30 -4 \
+              -A "$UA" \
+              -H 'Accept: */*' \
+              -H 'Accept-Language: ko-KR,ko;q=0.9' \
+              -o /tmp/kamis.json \
+              -w '%{http_code}' \
+              "$URL2" || echo "000")
+            echo "curl fallback HTTP $HTTP2"
+          fi
+          echo "KAMIS_RAW_PATH=/tmp/kamis.json" >> "$GITHUB_ENV"
 
       - name: Update market-live.json
         env:
           KAMIS_CERT_KEY: ${{ secrets.KAMIS_CERT_KEY }}
           KAMIS_CERT_ID: ${{ secrets.KAMIS_CERT_ID }}
+          KAMIS_RAW_PATH: ${{ env.KAMIS_RAW_PATH }}
         run: node scripts/update-market-feed.mjs
 
       - name: Commit if changed
