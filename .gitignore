@@ -28,6 +28,7 @@ node_modules/
 
 # Secrets — never commit
 .env
-.env.*
 .env.local
 **/secrets.*
+# allow example template
+!.env.local.example
