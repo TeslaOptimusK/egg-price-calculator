@@ -1,32 +1,39 @@
 {
-  "asOf": "2026-08-05",
-  "source": "KAMIS 지역별 가격동향 (특란30구, 축평원 축산유통정보)",
+  "asOf": "2026-08-06",
+  "source": "KAMIS 소매 자동갱신 (2026-08-06, 로컬 PC)",
   "packCount": 30,
-  "note": "특란 30구 지역·일자 추세 포함(전국·수도권·충청 실측 + 기타 권역 참고 환산). 다른 호수는 특란 대비 비중 보간. 기준 2026.07.25~08.03.",
+  "note": "로컬 PC에서 하루 1회 KAMIS를 조회해 갱신했습니다. 샘플 2건. 공식 공시·지역·단위와 다를 수 있습니다. 미수집 호수(so,jung,dae,wang)는 관측 호수 대비 기본 비중으로 보간.",
   "packPrice": {
-    "so": 5172,
-    "jung": 5868,
-    "dae": 6564,
-    "teuk": 7360,
-    "wang": 8156
+    "so": 8983,
+    "jung": 10192,
+    "dae": 11401,
+    "teuk": 12783,
+    "wang": 14165
   },
-  "updatedAt": "2026-08-05T06:14:34.049Z",
+  "updatedAt": "2026-08-05T23:30:03.339Z",
   "autoUpdate": {
-    "mode": "kamis-fallback",
+    "mode": "kamis",
     "timezone": "Asia/Seoul",
     "policy": "daily",
-    "observed": [],
-    "interpolated": []
+    "observed": [
+      "teuk"
+    ],
+    "interpolated": [
+      "so",
+      "jung",
+      "dae",
+      "wang"
+    ]
   },
   "trend": {
     "product": "특란 30구",
     "unit": "30개",
     "grade": "일반란",
-    "asOf": "2026-08-05",
+    "asOf": "2026-08-06",
     "source": "축산물품질평가원 축산유통정보 / KAMIS",
     "regions": {
       "전국": {
-        "latest": 7360,
+        "latest": 12783,
         "series": [
           {
             "date": "2026-07-25",
