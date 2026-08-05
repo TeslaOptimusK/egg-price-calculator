@@ -1,19 +1,28 @@
 {
   "asOf": "2026-08-05",
-  "source": "KAMIS 소매 자동갱신 (2026-08-05, 로컬 PC)",
+  "source": "KAMIS 소매 자동갱신 (2026-08-05, 로컬 PC · 부분호수 보간)",
   "packCount": 30,
-  "note": "로컬 PC에서 하루 1회 KAMIS를 조회해 갱신했습니다. 샘플 2건. 공식 공시·지역·단위와 다를 수 있습니다. (GitHub Actions IP는 KAMIS 방화벽에 막힐 수 있어 로컬 갱신을 권장)",
+  "note": "특란은 KAMIS 관측(샘플), 나머지 호수는 기본 비중×관측 배율로 보간. 왕란이 특란보다 낮게 나오던 혼합 기본값 문제 수정.",
   "packPrice": {
-    "so": 5200,
-    "jung": 5900,
-    "dae": 6600,
+    "so": 8976,
+    "jung": 10185,
+    "dae": 11393,
     "teuk": 12774,
-    "wang": 8200
+    "wang": 14155
   },
-  "updatedAt": "2026-08-05T03:34:39.584Z",
+  "updatedAt": "2026-08-05T04:31:08.500Z",
   "autoUpdate": {
     "mode": "kamis",
     "timezone": "Asia/Seoul",
-    "policy": "daily"
+    "policy": "daily",
+    "observed": [
+      "teuk"
+    ],
+    "interpolated": [
+      "so",
+      "jung",
+      "dae",
+      "wang"
+    ]
   }
 }

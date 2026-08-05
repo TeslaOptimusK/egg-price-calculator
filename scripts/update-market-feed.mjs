@@ -379,28 +379,6 @@ async function main() {
   let note = existing.note || "";
   let mode = "date-roll";
 
-  if (key && id) {
-    try {
-      const r = await fetchKamis(key, id);
-      packPrice = { ...packPrice, ...r.packPrice };
-      source = `KAMIS 소매 자동갱신 (${today})`;
-      note = `GitHub Actions가 하루 1회 KAMIS를 조회해 갱신했습니다. 샘플 ${r.sampleCount}건. 공식 공시·지역·단위와 다를 수 있습니다.`;
-      mode = "kamis";
-      console.log("KAMIS ok", packPrice);
-    } catch (e) {
-      console.warn("KAMIS failed, keep previous prices:", e.message);
-      source = `${existing.source || "공개 시세"} · 자동갱신 실패→가격유지`;
-      note = `자동 갱신 시 KAMIS 오류(${e.message}). 이전 packPrice 유지, 날짜만 ${today}.`;
-      mode = "kamis-fallback";
-    }
-  } else {
-    console.log("No KAMIS secrets — rolling date, keeping packPrice");
-    source = "공개 시세 피드 (자동 날짜 갱신 · 가격은 수동/이전값)";
-    note =
-      "KAMIS_CERT_KEY / KAMIS_CERT_ID 시크릿이 없어 가격은 유지하고 기준일만 갱신했습니다.";
-    mode = "date-roll";
-  }
-
   const defaults = {
     so: 5200,
     jung: 5900,
@@ -408,8 +386,40 @@ async function main() {
     teuk: 7400,
     wang: 8200,
   };
-  for (const sid of SIZES) {
-    if (!(packPrice[sid] > 0)) packPrice[sid] = defaults[sid];
+  /** @type {{ observed: string[], filled: string[] }} */
+  let completed = { observed: [], filled: [] };
+
+  if (key && id) {
+    try {
+      const r = await fetchKamis(key, id);
+      // 관측된 호수만 넘김 (기존 JSON과 섞지 않음 — 특란만 갱신+왕란 옛값 역전 방지)
+      completed = completePackPrices(r.packPrice || {}, defaults);
+      packPrice = completed.packPrice;
+      const via =
+        process.env.GITHUB_ACTIONS === "true"
+          ? "GitHub Actions"
+          : "로컬 PC";
+      source = `KAMIS 소매 자동갱신 (${today}, ${via})`;
+      note = `${via}에서 하루 1회 KAMIS를 조회해 갱신했습니다. 샘플 ${r.sampleCount}건. 공식 공시·지역·단위와 다를 수 있습니다.`;
+      if (completed.filled.length) {
+        note += ` 미수집 호수(${completed.filled.join(",")})는 관측 호수 대비 기본 비중으로 보간.`;
+      }
+      mode = "kamis";
+      console.log("KAMIS ok", packPrice, "observed", completed.observed);
+    } catch (e) {
+      console.warn("KAMIS failed, keep previous prices:", e.message);
+      packPrice = { ...defaults, ...(existing.packPrice || {}) };
+      source = `${existing.source || "공개 시세"} · 자동갱신 실패→가격유지`;
+      note = `자동 갱신 시 KAMIS 오류(${e.message}). 이전 packPrice 유지, 날짜만 ${today}.`;
+      mode = "kamis-fallback";
+    }
+  } else {
+    console.log("No KAMIS secrets — rolling date, keeping packPrice");
+    packPrice = { ...defaults, ...(existing.packPrice || {}) };
+    source = "공개 시세 피드 (자동 날짜 갱신 · 가격은 수동/이전값)";
+    note =
+      "KAMIS_CERT_KEY / KAMIS_CERT_ID 시크릿이 없어 가격은 유지하고 기준일만 갱신했습니다.";
+    mode = "date-roll";
   }
 
   writeFeed({
@@ -423,9 +433,64 @@ async function main() {
       mode,
       timezone: "Asia/Seoul",
       policy: "daily",
+      observed: completed.observed,
+      interpolated: completed.filled,
     },
   });
-  console.log("Done", mode, today);
+  console.log("Done", mode, today, packPrice);
+}
+
+/**
+ * live에 있는 호수만 쓰고, 없는 호수는 default 대비 관측 배율로 채움.
+ * 전부 없으면 defaults 그대로.
+ */
+function completePackPrices(live, defaults) {
+  const observed = {};
+  const ratios = [];
+  for (const sid of SIZES) {
+    const v = live[sid];
+    if (v > 0) {
+      observed[sid] = Math.round(v);
+      if (defaults[sid] > 0) ratios.push(v / defaults[sid]);
+    }
+  }
+  if (!ratios.length) {
+    return {
+      packPrice: { ...defaults },
+      observed: [],
+      filled: SIZES.slice(),
+    };
+  }
+  const scale =
+    ratios.reduce((a, b) => a + b, 0) / ratios.length;
+  const packPrice = {};
+  const filled = [];
+  for (const sid of SIZES) {
+    if (observed[sid] > 0) {
+      packPrice[sid] = observed[sid];
+    } else {
+      packPrice[sid] = Math.round(defaults[sid] * scale);
+      filled.push(sid);
+    }
+  }
+  // 소→왕 단가 역전(데이터 오류) 시 완만히 정렬: 각 단계 최소 이전값 이상
+  for (let i = 1; i < SIZES.length; i++) {
+    const prev = SIZES[i - 1];
+    const cur = SIZES[i];
+    if (packPrice[cur] < packPrice[prev]) {
+      // 보간된 쪽만 끌어올림 (관측값은 유지하되 경고)
+      if (filled.includes(cur)) {
+        packPrice[cur] = packPrice[prev];
+      } else if (filled.includes(prev)) {
+        packPrice[prev] = Math.min(packPrice[prev], packPrice[cur]);
+      }
+    }
+  }
+  return {
+    packPrice,
+    observed: Object.keys(observed),
+    filled,
+  };
 }
 
 main().catch((e) => {
