@@ -3,6 +3,7 @@ android/.gradle/
 android/build/
 android/app/build/
 android/local.properties
+android/keystore.properties
 android/*.iml
 android/.idea/
 *.apk
@@ -10,6 +11,8 @@ android/.idea/
 *.ap_
 *.dex
 captures/
+android/app/release/
+
 
 # Kotlin / Java
 *.class
@@ -32,3 +35,19 @@ node_modules/
 **/secrets.*
 # allow example template
 !.env.local.example
+
+# Android signing keys (never commit)
+android/keystore/*.jks
+android/keystore/*.keystore
+android/keystore/*.pem
+android/keystore/*.p12
+android/keystore/*-passwords.txt
+android/keystore/*.zip
+*.jks
+*.keystore
+*.pem
+!android/keystore.properties.example
+
+# Local secret backups (use D:\Backups instead)
+**/egg-critical-*.zip
+EggPriceCalc-Backups/
