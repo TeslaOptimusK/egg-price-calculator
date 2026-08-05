@@ -422,7 +422,8 @@ async function main() {
     mode = "date-roll";
   }
 
-  writeFeed({
+  // 지역 추세(trend)는 별도 소스 — pack 일일 갱신 시 기존 지역 시계열을 지우지 않음
+  const feed = {
     asOf: today,
     source,
     packCount: 30,
@@ -436,7 +437,34 @@ async function main() {
       observed: completed.observed,
       interpolated: completed.filled,
     },
-  });
+  };
+  if (existing.trend && existing.trend.regions && Object.keys(existing.trend.regions).length) {
+    feed.trend = existing.trend;
+    // 특란 팩 가격이 있으면 전국 latest 를 맞춤 (시계열 자체는 유지)
+    const teuk = packPrice.teuk;
+    if (teuk > 0 && feed.trend.regions["전국"]) {
+      feed.trend = {
+        ...feed.trend,
+        asOf: today,
+        regions: {
+          ...feed.trend.regions,
+          전국: {
+            ...feed.trend.regions["전국"],
+            latest: teuk,
+          },
+        },
+      };
+    }
+    console.log(
+      "Preserved trend regions:",
+      Object.keys(feed.trend.regions).join(", ")
+    );
+  } else {
+    console.warn(
+      "No trend.regions in existing feed — region spinner will only show 전국 until trend is restored"
+    );
+  }
+  writeFeed(feed);
   console.log("Done", mode, today, packPrice);
 }
 

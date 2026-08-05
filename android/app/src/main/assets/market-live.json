@@ -1,8 +1,8 @@
 {
   "asOf": "2026-08-05",
-  "source": "KAMIS 지역별 가격동향 (특란30구, 축평원 축산유통정보) · 자동갱신 실패→가격유지",
+  "source": "KAMIS 지역별 가격동향 (특란30구, 축평원 축산유통정보)",
   "packCount": 30,
-  "note": "자동 갱신 시 KAMIS 오류(KAMIS_RAW_PATH: JSON 파싱 실패: <br>\r\n<br>\r\n<center>\r\n<h2>\r\nThe request / response that are contrary to the Web firewall security policies have been blo | curl 406 https://www.kamis.or.kr/service/price/xml.do?action=dailyPri | curl 406 https://www.kamis.or.kr/service/price/xml.do?action=dailyPri | curl 406 https://www.kamis.or.kr/service/price/xml.do?action=dailyPri | curl 406 https://www.kamis.or.kr/service/price/xml.do?action=periodPr | curl 406 http://www.kamis.or.kr/service/price/xml.do?action=dailyPric). 이전 packPrice 유지, 날짜만 2026-08-05.",
+  "note": "특란 30구 지역·일자 추세 포함. 다른 호수는 특란 대비 비중 보간. 기준 2026.07.25~08.03.",
   "packPrice": {
     "so": 5172,
     "jung": 5868,
@@ -17,5 +17,374 @@
     "policy": "daily",
     "observed": [],
     "interpolated": []
+  },
+  "trend": {
+    "product": "특란 30구",
+    "unit": "30개",
+    "grade": "일반란",
+    "asOf": "2026-08-05",
+    "source": "축산물품질평가원 축산유통정보 / KAMIS",
+    "regions": {
+      "전국": {
+        "latest": 7360,
+        "series": [
+          {
+            "date": "2026-07-25",
+            "price": 7347
+          },
+          {
+            "date": "2026-07-26",
+            "price": 7347
+          },
+          {
+            "date": "2026-07-27",
+            "price": 7347
+          },
+          {
+            "date": "2026-07-28",
+            "price": 7354
+          },
+          {
+            "date": "2026-07-29",
+            "price": 7367
+          },
+          {
+            "date": "2026-07-30",
+            "price": 7299
+          },
+          {
+            "date": "2026-07-31",
+            "price": 7360
+          },
+          {
+            "date": "2026-08-01",
+            "price": 7360
+          },
+          {
+            "date": "2026-08-02",
+            "price": 7360
+          },
+          {
+            "date": "2026-08-03",
+            "price": 7360
+          }
+        ]
+      },
+      "서울": {
+        "latest": 6837,
+        "series": [
+          {
+            "date": "2026-07-25",
+            "price": 6837
+          },
+          {
+            "date": "2026-07-26",
+            "price": 6837
+          },
+          {
+            "date": "2026-07-27",
+            "price": 6837
+          },
+          {
+            "date": "2026-07-28",
+            "price": 6837
+          },
+          {
+            "date": "2026-07-29",
+            "price": 6837
+          },
+          {
+            "date": "2026-07-30",
+            "price": 6837
+          },
+          {
+            "date": "2026-07-31",
+            "price": 6837
+          },
+          {
+            "date": "2026-08-01",
+            "price": 6837
+          },
+          {
+            "date": "2026-08-02",
+            "price": 6837
+          },
+          {
+            "date": "2026-08-03",
+            "price": 6837
+          }
+        ]
+      },
+      "인천": {
+        "latest": 8463,
+        "series": [
+          {
+            "date": "2026-07-25",
+            "price": 8463
+          },
+          {
+            "date": "2026-07-26",
+            "price": 8463
+          },
+          {
+            "date": "2026-07-27",
+            "price": 8463
+          },
+          {
+            "date": "2026-07-28",
+            "price": 8463
+          },
+          {
+            "date": "2026-07-29",
+            "price": 8463
+          },
+          {
+            "date": "2026-07-30",
+            "price": 8463
+          },
+          {
+            "date": "2026-07-31",
+            "price": 8463
+          },
+          {
+            "date": "2026-08-01",
+            "price": 8463
+          },
+          {
+            "date": "2026-08-02",
+            "price": 8463
+          },
+          {
+            "date": "2026-08-03",
+            "price": 8463
+          }
+        ]
+      },
+      "경기": {
+        "latest": 7729,
+        "series": [
+          {
+            "date": "2026-07-25",
+            "price": 7729
+          },
+          {
+            "date": "2026-07-26",
+            "price": 7729
+          },
+          {
+            "date": "2026-07-27",
+            "price": 7729
+          },
+          {
+            "date": "2026-07-28",
+            "price": 7729
+          },
+          {
+            "date": "2026-07-29",
+            "price": 7729
+          },
+          {
+            "date": "2026-07-30",
+            "price": 7729
+          },
+          {
+            "date": "2026-07-31",
+            "price": 7729
+          },
+          {
+            "date": "2026-08-01",
+            "price": 7729
+          },
+          {
+            "date": "2026-08-02",
+            "price": 7729
+          },
+          {
+            "date": "2026-08-03",
+            "price": 7729
+          }
+        ]
+      },
+      "강원": {
+        "latest": 6975,
+        "series": [
+          {
+            "date": "2026-07-25",
+            "price": 6975
+          },
+          {
+            "date": "2026-07-26",
+            "price": 6975
+          },
+          {
+            "date": "2026-07-27",
+            "price": 6975
+          },
+          {
+            "date": "2026-07-28",
+            "price": 6975
+          },
+          {
+            "date": "2026-07-29",
+            "price": 6975
+          },
+          {
+            "date": "2026-07-30",
+            "price": 6975
+          },
+          {
+            "date": "2026-07-31",
+            "price": 6975
+          },
+          {
+            "date": "2026-08-01",
+            "price": 6975
+          },
+          {
+            "date": "2026-08-02",
+            "price": 6975
+          },
+          {
+            "date": "2026-08-03",
+            "price": 6975
+          }
+        ]
+      },
+      "대전": {
+        "latest": 7250,
+        "series": [
+          {
+            "date": "2026-07-25",
+            "price": 7250
+          },
+          {
+            "date": "2026-07-26",
+            "price": 7250
+          },
+          {
+            "date": "2026-07-27",
+            "price": 7250
+          },
+          {
+            "date": "2026-07-28",
+            "price": 7250
+          },
+          {
+            "date": "2026-07-29",
+            "price": 7250
+          },
+          {
+            "date": "2026-07-30",
+            "price": 7250
+          },
+          {
+            "date": "2026-07-31",
+            "price": 7250
+          },
+          {
+            "date": "2026-08-01",
+            "price": 7250
+          },
+          {
+            "date": "2026-08-02",
+            "price": 7250
+          },
+          {
+            "date": "2026-08-03",
+            "price": 7250
+          }
+        ]
+      },
+      "충남": {
+        "latest": 6931,
+        "series": [
+          {
+            "date": "2026-07-25",
+            "price": 6931
+          },
+          {
+            "date": "2026-07-26",
+            "price": 6931
+          },
+          {
+            "date": "2026-07-27",
+            "price": 6931
+          },
+          {
+            "date": "2026-07-28",
+            "price": 6931
+          },
+          {
+            "date": "2026-07-29",
+            "price": 6931
+          },
+          {
+            "date": "2026-07-30",
+            "price": 6931
+          },
+          {
+            "date": "2026-07-31",
+            "price": 6931
+          },
+          {
+            "date": "2026-08-01",
+            "price": 6931
+          },
+          {
+            "date": "2026-08-02",
+            "price": 6931
+          },
+          {
+            "date": "2026-08-03",
+            "price": 6931
+          }
+        ]
+      },
+      "충북": {
+        "latest": 5779,
+        "series": [
+          {
+            "date": "2026-07-25",
+            "price": 5779
+          },
+          {
+            "date": "2026-07-26",
+            "price": 5779
+          },
+          {
+            "date": "2026-07-27",
+            "price": 5779
+          },
+          {
+            "date": "2026-07-28",
+            "price": 5779
+          },
+          {
+            "date": "2026-07-29",
+            "price": 5779
+          },
+          {
+            "date": "2026-07-30",
+            "price": 5779
+          },
+          {
+            "date": "2026-07-31",
+            "price": 5779
+          },
+          {
+            "date": "2026-08-01",
+            "price": 5779
+          },
+          {
+            "date": "2026-08-02",
+            "price": 5779
+          },
+          {
+            "date": "2026-08-03",
+            "price": 5779
+          }
+        ]
+      }
+    }
   }
 }
