@@ -1,8 +1,8 @@
 {
-  "asOf": "2026-08-15",
-  "source": "KAMIS 소매 자동갱신 (2026-08-06, 로컬 PC) · 자동갱신 실패→가격유지 · 자동갱신 실패→가격유지 · 자동갱신 실패→가격유지 · 자동갱신 실패→가격유지 · 자동갱신 실패→가격유지 · 자동갱신 실패→가격유지 · 자동갱신 실패→가격유지 · 자동갱신 실패→가격유지 · 자동갱신 실패→가격유지 · 자동갱신 실패→가격유지",
+  "asOf": "2026-08-16",
+  "source": "KAMIS 소매 자동갱신 (2026-08-06, 로컬 PC) · 자동갱신 실패→가격유지 · 자동갱신 실패→가격유지 · 자동갱신 실패→가격유지 · 자동갱신 실패→가격유지 · 자동갱신 실패→가격유지 · 자동갱신 실패→가격유지 · 자동갱신 실패→가격유지 · 자동갱신 실패→가격유지 · 자동갱신 실패→가격유지 · 자동갱신 실패→가격유지 · 자동갱신 실패→가격유지",
   "packCount": 30,
-  "note": "자동 갱신 시 KAMIS 오류(KAMIS_RAW_PATH: JSON 파싱 실패: <br>\r\n<br>\r\n<center>\r\n<h2>\r\nThe request / response that are contrary to the Web firewall security policies have been blo | curl 406 https://www.kamis.or.kr/service/price/xml.do?action=dailyPri | curl 406 https://www.kamis.or.kr/service/price/xml.do?action=dailyPri | curl 406 https://www.kamis.or.kr/service/price/xml.do?action=dailyPri | curl 406 https://www.kamis.or.kr/service/price/xml.do?action=periodPr | curl 406 http://www.kamis.or.kr/service/price/xml.do?action=dailyPric). 이전 packPrice 유지, 날짜만 2026-08-15.",
+  "note": "자동 갱신 시 KAMIS 오류(KAMIS_RAW_PATH: JSON 파싱 실패: <br>\r\n<br>\r\n<center>\r\n<h2>\r\nThe request / response that are contrary to the Web firewall security policies have been blo | curl 406 https://www.kamis.or.kr/service/price/xml.do?action=dailyPri | curl 406 https://www.kamis.or.kr/service/price/xml.do?action=dailyPri | curl 406 https://www.kamis.or.kr/service/price/xml.do?action=dailyPri | curl 406 https://www.kamis.or.kr/service/price/xml.do?action=periodPr | curl 406 http://www.kamis.or.kr/service/price/xml.do?action=dailyPric). 이전 packPrice 유지, 날짜만 2026-08-16.",
   "packPrice": {
     "so": 8983,
     "jung": 10192,
@@ -10,7 +10,7 @@
     "teuk": 12783,
     "wang": 14165
   },
-  "updatedAt": "2026-08-14T21:52:38.024Z",
+  "updatedAt": "2026-08-15T21:41:37.094Z",
   "autoUpdate": {
     "mode": "kamis-fallback",
     "timezone": "Asia/Seoul",
@@ -22,7 +22,7 @@
     "product": "특란 30구",
     "unit": "30개",
     "grade": "일반란",
-    "asOf": "2026-08-15",
+    "asOf": "2026-08-16",
     "source": "축산물품질평가원 축산유통정보 / KAMIS",
     "regions": {
       "전국": {
