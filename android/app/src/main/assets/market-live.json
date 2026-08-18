@@ -1,32 +1,39 @@
 {
-  "asOf": "2026-08-18",
-  "source": "KAMIS 소매 자동갱신 (2026-08-06, 로컬 PC) · 자동갱신 실패→가격유지 · 자동갱신 실패→가격유지 · 자동갱신 실패→가격유지 · 자동갱신 실패→가격유지 · 자동갱신 실패→가격유지 · 자동갱신 실패→가격유지 · 자동갱신 실패→가격유지 · 자동갱신 실패→가격유지 · 자동갱신 실패→가격유지 · 자동갱신 실패→가격유지 · 자동갱신 실패→가격유지 · 자동갱신 실패→가격유지 · 자동갱신 실패→가격유지",
+  "asOf": "2026-08-19",
+  "source": "KAMIS 소매 자동갱신 (2026-08-19, GitHub Actions)",
   "packCount": 30,
-  "note": "자동 갱신 시 KAMIS 오류(KAMIS_RAW_PATH: JSON 파싱 실패: <br>\r\n<br>\r\n<center>\r\n<h2>\r\nThe request / response that are contrary to the Web firewall security policies have been blo | curl 406 https://www.kamis.or.kr/service/price/xml.do?action=dailyPri | curl 406 https://www.kamis.or.kr/service/price/xml.do?action=dailyPri | curl 406 https://www.kamis.or.kr/service/price/xml.do?action=dailyPri | curl 406 https://www.kamis.or.kr/service/price/xml.do?action=periodPr | curl 406 http://www.kamis.or.kr/service/price/xml.do?action=dailyPric). 이전 packPrice 유지, 날짜만 2026-08-18.",
+  "note": "GitHub Actions에서 하루 1회 KAMIS를 조회해 갱신했습니다. 샘플 2건. 공식 공시·지역·단위와 다를 수 있습니다. 미수집 호수(so,jung,dae,wang)는 관측 호수 대비 기본 비중으로 보간.",
   "packPrice": {
-    "so": 8983,
-    "jung": 10192,
-    "dae": 11401,
-    "teuk": 12783,
-    "wang": 14165
+    "so": 8989,
+    "jung": 10199,
+    "dae": 11409,
+    "teuk": 12792,
+    "wang": 14175
   },
-  "updatedAt": "2026-08-17T21:52:58.002Z",
+  "updatedAt": "2026-08-18T21:49:36.444Z",
   "autoUpdate": {
-    "mode": "kamis-fallback",
+    "mode": "kamis",
     "timezone": "Asia/Seoul",
     "policy": "daily",
-    "observed": [],
-    "interpolated": []
+    "observed": [
+      "teuk"
+    ],
+    "interpolated": [
+      "so",
+      "jung",
+      "dae",
+      "wang"
+    ]
   },
   "trend": {
     "product": "특란 30구",
     "unit": "30개",
     "grade": "일반란",
-    "asOf": "2026-08-18",
+    "asOf": "2026-08-19",
     "source": "축산물품질평가원 축산유통정보 / KAMIS",
     "regions": {
       "전국": {
-        "latest": 12783,
+        "latest": 12792,
         "series": [
           {
             "date": "2026-07-25",
