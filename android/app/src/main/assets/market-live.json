@@ -1,32 +1,39 @@
 {
-  "asOf": "2026-08-25",
-  "source": "KAMIS 소매 자동갱신 (2026-08-24, GitHub Actions) · 자동갱신 실패→가격유지",
+  "asOf": "2026-08-26",
+  "source": "KAMIS 소매 자동갱신 (2026-08-26, GitHub Actions)",
   "packCount": 30,
-  "note": "자동 갱신 시 KAMIS 오류(curl HTTP 0 | curl HTTP 0 | curl HTTP 0 | curl HTTP 0 | curl HTTP 0). 이전 packPrice 유지, 날짜만 2026-08-25.",
+  "note": "GitHub Actions에서 하루 1회 KAMIS를 조회해 갱신했습니다. 샘플 2건. 공식 공시·지역·단위와 다를 수 있습니다. 미수집 호수(so,jung,dae,wang)는 관측 호수 대비 기본 비중으로 보간.",
   "packPrice": {
-    "so": 8820,
-    "jung": 10008,
-    "dae": 11195,
-    "teuk": 12552,
-    "wang": 13909
+    "so": 8757,
+    "jung": 9936,
+    "dae": 11115,
+    "teuk": 12462,
+    "wang": 13809
   },
-  "updatedAt": "2026-08-24T22:00:29.682Z",
+  "updatedAt": "2026-08-25T21:55:56.164Z",
   "autoUpdate": {
-    "mode": "kamis-fallback",
+    "mode": "kamis",
     "timezone": "Asia/Seoul",
     "policy": "daily",
-    "observed": [],
-    "interpolated": []
+    "observed": [
+      "teuk"
+    ],
+    "interpolated": [
+      "so",
+      "jung",
+      "dae",
+      "wang"
+    ]
   },
   "trend": {
     "product": "특란 30구",
     "unit": "30개",
     "grade": "일반란",
-    "asOf": "2026-08-25",
+    "asOf": "2026-08-26",
     "source": "축산물품질평가원 축산유통정보 / KAMIS",
     "regions": {
       "전국": {
-        "latest": 12552,
+        "latest": 12462,
         "series": [
           {
             "date": "2026-07-25",
