@@ -1,16 +1,16 @@
 {
-  "asOf": "2026-10-08",
-  "source": "KAMIS 소매 자동갱신 (2026-10-08, GitHub Actions)",
+  "asOf": "2026-10-09",
+  "source": "KAMIS 소매 자동갱신 (2026-10-09, GitHub Actions)",
   "packCount": 30,
   "note": "GitHub Actions에서 하루 1회 KAMIS를 조회해 갱신했습니다. 샘플 2건. 공식 공시·지역·단위와 다를 수 있습니다. 미수집 호수(so,jung,dae,wang)는 관측 호수 대비 기본 비중으로 보간.",
   "packPrice": {
-    "so": 8818,
-    "jung": 10005,
-    "dae": 11192,
-    "teuk": 12549,
-    "wang": 13906
+    "so": 8850,
+    "jung": 10041,
+    "dae": 11232,
+    "teuk": 12594,
+    "wang": 13956
   },
-  "updatedAt": "2026-10-08T00:37:46.215Z",
+  "updatedAt": "2026-10-09T00:52:57.388Z",
   "autoUpdate": {
     "mode": "kamis",
     "timezone": "Asia/Seoul",
@@ -29,11 +29,11 @@
     "product": "특란 30구",
     "unit": "30개",
     "grade": "일반란",
-    "asOf": "2026-10-08",
+    "asOf": "2026-10-09",
     "source": "축산물품질평가원 축산유통정보 / KAMIS",
     "regions": {
       "전국": {
-        "latest": 12549,
+        "latest": 12594,
         "series": [
           {
             "date": "2026-07-25",
