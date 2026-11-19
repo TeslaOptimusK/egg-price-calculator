@@ -1,8 +1,8 @@
 {
-  "asOf": "2026-11-18",
-  "source": "KAMIS 소매 자동갱신 (2026-11-17, GitHub Actions) · 자동갱신 실패→가격유지",
+  "asOf": "2026-11-19",
+  "source": "KAMIS 소매 자동갱신 (2026-11-17, GitHub Actions) · 자동갱신 실패→가격유지 · 자동갱신 실패→가격유지",
   "packCount": 30,
-  "note": "자동 갱신 시 KAMIS 오류(curl HTTP 0 | curl HTTP 0 | curl HTTP 0 | curl HTTP 0 | curl HTTP 302). 이전 packPrice 유지, 날짜만 2026-11-18.",
+  "note": "자동 갱신 시 KAMIS 오류(curl HTTP 0 | curl HTTP 0 | curl HTTP 0 | curl HTTP 0 | curl HTTP 302). 이전 packPrice 유지, 날짜만 2026-11-19.",
   "packPrice": {
     "so": 8567,
     "jung": 9721,
@@ -10,7 +10,7 @@
     "teuk": 12192,
     "wang": 13510
   },
-  "updatedAt": "2026-11-18T02:43:48.504Z",
+  "updatedAt": "2026-11-19T02:12:33.021Z",
   "autoUpdate": {
     "mode": "kamis-fallback",
     "timezone": "Asia/Seoul",
@@ -22,7 +22,7 @@
     "product": "특란 30구",
     "unit": "30개",
     "grade": "일반란",
-    "asOf": "2026-11-18",
+    "asOf": "2026-11-19",
     "source": "축산물품질평가원 축산유통정보 / KAMIS",
     "regions": {
       "전국": {
